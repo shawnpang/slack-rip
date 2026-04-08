@@ -385,7 +385,7 @@
       </div>
       <div class="faq-item">
         <h4>My workspace was already terminated. Can I still export?</h4>
-        <p>If you still have a valid session token (d-cookie) from before termination, Slackdump may still be able to pull data during the 90-day grace period. Act fast &mdash; after July 1, 2026, data is permanently deleted.</p>
+        <p>If you still have a valid session token (d-cookie) from before termination, Slackdump may still be able to pull data &mdash; but Slack has already deleted many workspaces. Act immediately, as the remaining data could disappear at any time.</p>
       </div>
       <div class="faq-item">
         <h4>Is this only for China/HK/Macau users?</h4>
@@ -407,10 +407,10 @@
 
     <!-- Final CTA -->
     <section class="final-cta">
-      <h2>The clock is ticking.</h2>
-      <p>Slack data for terminated workspaces will be <span class="deadline">permanently deleted on July 1, 2026</span>.<br>Every day you wait is data you might never get back.</p>
+      <h2>Don't lose years of team knowledge.</h2>
+      <p>Slack has already deleted data for thousands of workspaces. If yours is still intact, <span class="deadline">back up your Slack history today</span>.<br>Once it's gone, there's no getting it back.</p>
       <div class="cta-group">
-        <a href="https://github.com/shawnpang/slack-rip" class="btn btn-red" target="_blank">Get Started Now</a>
+        <a href="https://github.com/shawnpang/slack-rip" class="btn btn-red" target="_blank">Back Up Now</a>
       </div>
     </section>
 
@@ -419,22 +419,5 @@
     </footer>
   </div>
 
-  <script>
-    // Countdown to July 1, 2026
-    function updateCountdown() {
-      const deadline = new Date('2026-07-01T00:00:00Z');
-      const now = new Date();
-      const diff = deadline - now;
-      if (diff <= 0) {
-        document.getElementById('countdown').textContent = 'DATA DELETED';
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      document.getElementById('countdown').textContent = `${days} days, ${hours} hours`;
-    }
-    updateCountdown();
-    setInterval(updateCountdown, 60000);
-  </script>
 </body>
 </html>
