@@ -216,7 +216,17 @@
 
     @media (max-width: 640px) {
       .features { grid-template-columns: 1fr; }
+      .everos-features { grid-template-columns: 1fr; }
       .hero { padding: 50px 0 40px; }
+      .hero h1 { font-size: 1.8rem; }
+      .steps { grid-template-columns: 1fr; }
+      .cta-group { flex-direction: column; align-items: center; }
+      .btn { width: 100%; text-align: center; justify-content: center; }
+      .urgency { font-size: 0.82rem; padding: 10px 14px; }
+      .timeline { padding-left: 24px; }
+      .timeline-item::before { left: -30px; }
+      nav { flex-direction: column; gap: 12px; }
+      .everos-section { padding: 28px 18px; }
     }
   </style>
 </head>
@@ -283,24 +293,33 @@
     <section class="section" id="how">
       <div class="section-title">
         <h2>How to save your data</h2>
-        <p>Three steps. No admin access required. Works even after workspace termination (if you still have your session token).</p>
+        <p>No admin access required. Export locally, keep forever, make it AI-searchable.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="step-num s1">1</div>
           <h3>Export with Slackdump</h3>
-          <p>Run one command to download all your messages, threads, files, and user data. Works with your personal Slack token &mdash; no admin privileges needed. Private channels, DMs, everything.</p>
-          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;color:var(--green);">
-            $ slackdump export -o my-workspace.zip
+          <p>Run the interactive wizard to download all your messages, threads, files, and user data. It will guide you through authentication &mdash; no admin privileges needed. Private channels, DMs, everything.</p>
+          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;">
+            <div style="color:var(--text-dim);margin-bottom:6px;"># Install</div>
+            <div style="color:var(--green);">$ brew install slackdump</div>
+            <div style="color:var(--text-dim);margin-top:8px;margin-bottom:6px;"># Run the export wizard</div>
+            <div style="color:var(--green);">$ slackdump wiz</div>
           </div>
+          <p style="margin-top:8px;font-size:0.8rem;color:var(--text-dim);">The wizard handles login, channel selection, and export format. No manual tokens needed.</p>
         </div>
         <div class="step">
           <div class="step-num s2">2</div>
-          <h3>Import into EverOS</h3>
-          <p>Feed your Slack export into EverOS &mdash; an open-source memory OS that transforms your chat history into a structured, searchable knowledge base powered by AI.</p>
-          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;color:var(--purple);">
-            $ everos import --source slack my-workspace.zip
+          <h3>Feed into EverOS</h3>
+          <p>Load your Slack export into EverOS &mdash; an open-source memory OS that transforms your chat history into a structured, searchable knowledge base powered by AI.</p>
+          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;">
+            <div style="color:var(--text-dim);margin-bottom:6px;"># Clone and start EverOS</div>
+            <div style="color:var(--purple);">$ git clone https://github.com/EverMind-AI/EverOS.git</div>
+            <div style="color:var(--purple);">$ cd EverOS && docker compose up -d</div>
+            <div style="color:var(--text-dim);margin-top:8px;margin-bottom:6px;"># Feed your Slack messages via API</div>
+            <div style="color:var(--purple);">$ uv run python src/run.py</div>
           </div>
+          <p style="margin-top:8px;font-size:0.8rem;color:var(--text-dim);">EverOS runs locally via Docker. Your data never leaves your machine.</p>
         </div>
         <div class="step">
           <div class="step-num s3">3</div>

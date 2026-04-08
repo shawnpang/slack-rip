@@ -14,22 +14,22 @@ This project helps you:
 
 ```bash
 # macOS
-brew install rusq/tap/slackdump
+brew install slackdump
 
-# Linux
+# Linux — download from GitHub releases
 curl -sSfL https://github.com/rusq/slackdump/releases/latest/download/slackdump_Linux_x86_64.tar.gz | tar xz
 
-# Windows — download from GitHub releases
+# Windows — download from GitHub releases page
 ```
 
 ### Step 2: Export Your Workspace
 
 ```bash
-# Interactive login (opens browser)
-slackdump export -o my-workspace.zip
+# Run the interactive wizard (handles login, channel selection, export)
+slackdump wiz
 
-# Or with token (if you have it)
-slackdump export -token xoxc-your-token -cookie "d=your-d-cookie" -o my-workspace.zip
+# Or see all available commands
+slackdump help
 ```
 
 This exports:
@@ -43,22 +43,33 @@ This exports:
 ### Step 3: Import into EverOS
 
 ```bash
-# Install EverOS
+# Clone and start EverOS (requires Docker)
 git clone https://github.com/EverMind-AI/EverOS.git
 cd EverOS
-pip install -r requirements.txt
+docker compose up -d
 
-# Import your Slack export
-python -m everos import --source slack my-workspace.zip
+# Install dependencies
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync
+
+# Configure your LLM API key
+cp env.template .env
+# Edit .env with your API keys
+
+# Start the server
+uv run python src/run.py
 ```
 
 ### Step 4: Search Your History
 
+EverOS provides a REST API to store and search your memories:
+
 ```bash
-python -m everos chat
-> What did the team decide about the Q3 launch plan?
-> Find all messages about the API redesign
-> Summarize the #engineering channel from last month
+# Verify it's running
+curl http://localhost:1995/health
+
+# Feed your Slack messages and search them via the API
+# See EverOS docs for full API reference
 ```
 
 ## Who is this for?
