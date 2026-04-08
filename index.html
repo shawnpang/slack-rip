@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>slack.rip — Save Your Slack Before It's Gone</title>
+  <meta name="description" content="Slack is terminating workspaces across Greater China. Export your messages, files, and history before it's too late. One-click backup + AI-powered search with EverOS.">
+  <meta property="og:title" content="slack.rip — Save Your Slack Before It's Gone">
+  <meta property="og:description" content="Slack terminated all Greater China workspaces on April 1, 2026. Export your data now before the 90-day deletion countdown ends.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-dim: #8888a0;
+      --red: #ef4444;
+      --red-glow: #f87171;
+      --red-bg: rgba(239,68,68,0.08);
+      --purple: #a78bfa;
+      --green: #34d399;
+      --yellow: #fbbf24;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Subtle red glow */
+    .glow-red {
+      position: fixed; width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%);
+      top: -300px; right: -200px; pointer-events: none; z-index: 0;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* Nav */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+    .logo { font-size: 1.3rem; font-weight: 900; letter-spacing: -0.5px; }
+    .logo .rip { color: var(--red); }
+
+    /* Urgency banner */
+    .urgency {
+      background: var(--red-bg);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 8px;
+      padding: 12px 20px;
+      text-align: center;
+      margin: 20px 0 0;
+      font-size: 0.9rem;
+    }
+    .urgency strong { color: var(--red-glow); }
+    .countdown { font-weight: 800; font-size: 1.1rem; color: var(--red-glow); }
+
+    /* Hero */
+    .hero { text-align: center; padding: 80px 0 60px; }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 900; line-height: 1.1;
+      letter-spacing: -1.5px; margin-bottom: 20px;
+    }
+    .hero h1 .strike { text-decoration: line-through; color: var(--text-dim); }
+    .hero h1 .red { color: var(--red-glow); }
+    .hero p { font-size: 1.1rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 16px; }
+    .hero .victims {
+      font-size: 0.85rem; color: var(--text-dim);
+      background: var(--surface); border: 1px solid var(--border);
+      display: inline-block; padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 32px;
+    }
+
+    .cta-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 10px;
+      font-size: 1rem; font-weight: 700;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-red {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff; box-shadow: 0 4px 20px rgba(239,68,68,0.4);
+    }
+    .btn-red:hover { box-shadow: 0 8px 30px rgba(239,68,68,0.6); }
+    .btn-outline {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* What happened */
+    .section { padding: 60px 0; }
+    .section-title { text-align: center; margin-bottom: 40px; }
+    .section-title h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .section-title p { color: var(--text-dim); max-width: 550px; margin: 0 auto; }
+
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+      border-left: 2px solid var(--border);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: -38px; top: 4px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red);
+    }
+    .timeline-item .date {
+      font-size: 0.8rem; font-weight: 700; color: var(--red-glow);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+    }
+    .timeline-item h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .timeline-item p { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* How it works */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 22px;
+      transition: border-color 0.3s;
+    }
+    .step:hover { border-color: var(--purple); }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem; margin-bottom: 14px;
+    }
+    .step-num.s1 { background: rgba(239,68,68,0.15); color: var(--red-glow); }
+    .step-num.s2 { background: rgba(167,139,250,0.15); color: var(--purple); }
+    .step-num.s3 { background: rgba(52,211,153,0.15); color: var(--green); }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .step p { color: var(--text-dim); font-size: 0.88rem; }
+
+    /* What you get */
+    .features {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .feature {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 18px;
+    }
+    .feature h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .feature p { color: var(--text-dim); font-size: 0.85rem; }
+
+    /* EverOS section */
+    .everos-section {
+      background: linear-gradient(135deg, rgba(167,139,250,0.05), rgba(52,211,153,0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+      margin: 40px 0;
+    }
+    .everos-section h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
+    .everos-section p { color: var(--text-dim); max-width: 600px; margin: 0 auto 20px; }
+    .everos-features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px; text-align: left; margin-top: 24px;
+    }
+    .everos-feat {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px;
+    }
+    .everos-feat h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; color: var(--purple); }
+    .everos-feat p { font-size: 0.82rem; color: var(--text-dim); }
+
+    /* FAQ */
+    .faq-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; margin-bottom: 12px;
+    }
+    .faq-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .faq-item p { color: var(--text-dim); font-size: 0.88rem; }
+
+    /* Final CTA */
+    .final-cta {
+      text-align: center; padding: 60px 0 40px;
+    }
+    .final-cta h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 900; letter-spacing: -1px; margin-bottom: 10px;
+    }
+    .final-cta .deadline { color: var(--red-glow); font-weight: 800; }
+    .final-cta p { color: var(--text-dim); margin-bottom: 24px; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0; text-align: center;
+      color: var(--text-dim); font-size: 0.8rem;
+    }
+    footer a { color: var(--text-dim); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .features { grid-template-columns: 1fr; }
+      .hero { padding: 50px 0 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-red"></div>
+
+  <div class="container">
+    <nav>
+      <div class="logo">slack<span class="rip">.rip</span></div>
+      <div style="display:flex;gap:20px;">
+        <a href="#how" style="color:var(--text-dim);text-decoration:none;font-size:0.9rem;">How it works</a>
+        <a href="#faq" style="color:var(--text-dim);text-decoration:none;font-size:0.9rem;">FAQ</a>
+        <a href="https://github.com/shawnpang/slack-rip" target="_blank" style="color:var(--text-dim);text-decoration:none;font-size:0.9rem;">GitHub</a>
+      </div>
+    </nav>
+
+    <div class="urgency">
+      <strong>Slack terminated all Greater China workspaces on April 1, 2026.</strong>
+      Data deletion begins in <span class="countdown" id="countdown"></span>
+    </div>
+
+    <section class="hero">
+      <h1>Your Slack is <span class="strike">alive</span> <span class="red">dead.</span><br>Your data doesn't have to be.</h1>
+      <p>Slack pulled the plug on workspaces across China, Hong Kong, and Macau. Thousands of teams lost years of messages, files, and institutional knowledge overnight.</p>
+      <div class="victims">Affecting paid & free workspaces &mdash; no admin access needed to export</div>
+      <p style="font-size:0.95rem;">Export everything. Keep it forever. Make it searchable with AI.</p>
+      <div class="cta-group">
+        <a href="#how" class="btn btn-red">Save My Slack Data</a>
+        <a href="https://github.com/shawnpang/slack-rip" class="btn btn-outline" target="_blank">View on GitHub</a>
+      </div>
+    </section>
+
+    <!-- What happened -->
+    <section class="section">
+      <div class="section-title">
+        <h2>What happened?</h2>
+        <p>A timeline of how Slack left thousands of teams stranded.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="date">November 2025</div>
+          <h3>Slack sends migration notices</h3>
+          <p>Slack notifies users in mainland China, Hong Kong, Taiwan, and Macau to "migrate to Alibaba Cloud" by February 2026. Many users report never receiving the email &mdash; it went to spam.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">February 2026</div>
+          <h3>Migration deadline passes</h3>
+          <p>The Alibaba Cloud migration option turns out to be non-existent for most users. Smaller teams receive straight termination notices with no migration path.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">April 1, 2026</div>
+          <h3>All Greater China workspaces terminated</h3>
+          <p>Slack cuts off all access. Users in China, Hong Kong, and Macau lose access to messages, files, channels, and integrations. A <strong>90-day deletion countdown</strong> begins.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">July 1, 2026</div>
+          <h3 style="color:var(--red-glow);">Permanent deletion</h3>
+          <p>All workspace data &mdash; messages, files, threads, user profiles &mdash; will be permanently deleted. No recovery possible after this date.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how">
+      <div class="section-title">
+        <h2>How to save your data</h2>
+        <p>Three steps. No admin access required. Works even after workspace termination (if you still have your session token).</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num s1">1</div>
+          <h3>Export with Slackdump</h3>
+          <p>Run one command to download all your messages, threads, files, and user data. Works with your personal Slack token &mdash; no admin privileges needed. Private channels, DMs, everything.</p>
+          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;color:var(--green);">
+            $ slackdump export -o my-workspace.zip
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num s2">2</div>
+          <h3>Import into EverOS</h3>
+          <p>Feed your Slack export into EverOS &mdash; an open-source memory OS that transforms your chat history into a structured, searchable knowledge base powered by AI.</p>
+          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;color:var(--purple);">
+            $ everos import --source slack my-workspace.zip
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num s3">3</div>
+          <h3>Search & Chat with your history</h3>
+          <p>Ask questions about your old Slack conversations. Find that message from 2 years ago. Your institutional knowledge lives on &mdash; and now it's actually searchable.</p>
+          <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.82rem;color:var(--yellow);">
+            "What did @jenny say about the Q3 launch plan?"
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What you get -->
+    <section class="section">
+      <div class="section-title">
+        <h2>What gets exported</h2>
+        <p>Everything you had access to in Slack.</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <h4>Public channels</h4>
+          <p>All messages, threads, and reactions from every public channel you're in.</p>
+        </div>
+        <div class="feature">
+          <h4>Private channels</h4>
+          <p>Private channel history that you have access to &mdash; no admin needed.</p>
+        </div>
+        <div class="feature">
+          <h4>Direct messages</h4>
+          <p>All your 1:1 and group DM conversations, complete with threads.</p>
+        </div>
+        <div class="feature">
+          <h4>Files & attachments</h4>
+          <p>PDFs, images, documents, code snippets &mdash; everything shared in channels.</p>
+        </div>
+        <div class="feature">
+          <h4>User profiles</h4>
+          <p>Names, avatars, email addresses, and status info for all workspace members.</p>
+        </div>
+        <div class="feature">
+          <h4>Threads & replies</h4>
+          <p>Complete thread context preserved, not just top-level messages.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EverOS -->
+    <div class="everos-section">
+      <h2>Don't just save it. Make it useful.</h2>
+      <p>EverOS transforms your exported Slack history into an AI-powered knowledge base. Ask questions, discover connections, and keep your team's institutional memory alive.</p>
+      <div class="everos-features">
+        <div class="everos-feat">
+          <h4>Semantic Search</h4>
+          <p>Find messages by meaning, not just keywords. "What was the decision on pricing?" works.</p>
+        </div>
+        <div class="everos-feat">
+          <h4>Knowledge Graphs</h4>
+          <p>EverOS builds structured relationships between topics, people, and decisions from your history.</p>
+        </div>
+        <div class="everos-feat">
+          <h4>Chat with History</h4>
+          <p>Ask natural language questions and get answers sourced from your actual Slack conversations.</p>
+        </div>
+        <div class="everos-feat">
+          <h4>Open Source</h4>
+          <p>Your data stays on your machine. EverOS runs locally. No third-party cloud required.</p>
+        </div>
+      </div>
+      <div style="margin-top:24px;">
+        <a href="https://github.com/EverMind-AI/EverOS" class="btn btn-outline" target="_blank" style="font-size:0.9rem;">View EverOS on GitHub</a>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="section-title">
+        <h2>FAQ</h2>
+      </div>
+      <div class="faq-item">
+        <h4>Do I need admin access to export?</h4>
+        <p>No. Slackdump works with your personal user token. You can export any channel, DM, or file that you personally have access to.</p>
+      </div>
+      <div class="faq-item">
+        <h4>My workspace was already terminated. Can I still export?</h4>
+        <p>If you still have a valid session token (d-cookie) from before termination, Slackdump may still be able to pull data during the 90-day grace period. Act fast &mdash; after July 1, 2026, data is permanently deleted.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Is this only for China/HK/Macau users?</h4>
+        <p>The tool works for any Slack workspace globally. But the urgency is highest for Greater China users who are facing forced termination and data loss.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Is my data safe?</h4>
+        <p>Everything runs on your local machine. Slackdump is open source. EverOS is open source. No data is sent to any third party. You own your export.</p>
+      </div>
+      <div class="faq-item">
+        <h4>What format is the export?</h4>
+        <p>Slackdump can output in Slack-compatible export format (JSON + files in a ZIP), which works with Mattermost, Discord importers, and EverOS.</p>
+      </div>
+      <div class="faq-item">
+        <h4>How long does the export take?</h4>
+        <p>Depends on workspace size. A typical workspace with 10K messages takes a few minutes. Large workspaces with 100K+ messages and lots of files may take 30-60 minutes.</p>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+      <h2>The clock is ticking.</h2>
+      <p>Slack data for terminated workspaces will be <span class="deadline">permanently deleted on July 1, 2026</span>.<br>Every day you wait is data you might never get back.</p>
+      <div class="cta-group">
+        <a href="https://github.com/shawnpang/slack-rip" class="btn btn-red" target="_blank">Get Started Now</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>slack.rip &mdash; Open source. Built by <a href="https://github.com/shawnpang">@shawnpang</a>. Powered by <a href="https://github.com/rusq/slackdump">Slackdump</a> + <a href="https://github.com/EverMind-AI/EverOS">EverOS</a>.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Countdown to July 1, 2026
+    function updateCountdown() {
+      const deadline = new Date('2026-07-01T00:00:00Z');
+      const now = new Date();
+      const diff = deadline - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').textContent = 'DATA DELETED';
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      document.getElementById('countdown').textContent = `${days} days, ${hours} hours`;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+  </script>
+</body>
+</html>
