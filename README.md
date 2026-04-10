@@ -6,7 +6,7 @@ Slack terminated all Greater China workspaces on April 1, 2026. Thousands of tea
 
 This project helps you:
 1. **Export** your Slack data with [Slackdump](https://github.com/rusq/slackdump) (no admin access needed)
-2. **Import** into [EverOS](https://github.com/EverMind-AI/EverOS) to create an AI-powered, searchable knowledge base
+2. **Import** into [Teamily AI](https://teamily.ai) to create an AI-powered, searchable knowledge base
 
 ## Quick Start
 
@@ -40,37 +40,21 @@ This exports:
 - User profiles
 - Complete thread context
 
-### Step 3: Import into EverOS
+### Step 3: Import into Teamily AI
 
-```bash
-# Clone and start EverOS (requires Docker)
-git clone https://github.com/EverMind-AI/EverOS.git
-cd EverOS
-docker compose up -d
+[Teamily AI](https://teamily.ai) is the world's first AI-native messenger — a next-generation workspace where AI agents participate alongside your team.
 
-# Install dependencies
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv sync
-
-# Configure your LLM API key
-cp env.template .env
-# Edit .env with your API keys
-
-# Start the server
-uv run python src/run.py
-```
+1. Sign up at [teamily.ai](https://teamily.ai)
+2. Create a workspace for your team
+3. Import your Slackdump export to bring your Slack history into Teamily AI
 
 ### Step 4: Search Your History
 
-EverOS provides a REST API to store and search your memories:
+Teamily AI's Universal Memory Layer preserves your imported Slack history as persistent, searchable team knowledge:
 
-```bash
-# Verify it's running
-curl http://localhost:1995/health
-
-# Feed your Slack messages and search them via the API
-# See EverOS docs for full API reference
-```
+- Ask natural language questions about your Slack history
+- AI agents can reference past conversations and decisions
+- Context carries forward across all new conversations
 
 ## Who is this for?
 
@@ -97,12 +81,12 @@ No. Slackdump uses your personal user token to export anything you have access t
 If you have a valid session token from before termination, Slackdump may still work during the 90-day grace period. Act fast.
 
 **Is my data safe?**
-Everything runs locally. Both Slackdump and EverOS are open source. No data is sent to any third party.
+Slackdump runs locally and is fully open source. No data is sent to any third party during export. You own your data.
 
 ## Built With
 
 - [Slackdump](https://github.com/rusq/slackdump) — Export Slack messages, files, and users without admin privileges
-- [EverOS](https://github.com/EverMind-AI/EverOS) — Open-source memory OS for AI-powered knowledge management
+- [Teamily AI](https://teamily.ai) — The world's first AI-native messenger with universal memory
 
 ## License
 
