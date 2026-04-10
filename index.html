@@ -259,6 +259,58 @@
       .timeline-item::before { left: -30px; }
       nav { flex-direction: column; gap: 12px; }
       .teamily-section { padding: 28px 18px; }
+      .tombstone { transform: scale(0.75); margin-bottom: -10px; }
+      .tombstone .ground { width: 200px; }
+    }
+
+    /* Tombstone */
+    .tombstone {
+      display: flex; flex-direction: column; align-items: center;
+      margin: 0 auto 24px; user-select: none;
+    }
+    .tombstone .stone {
+      width: 180px; height: 220px;
+      background: linear-gradient(180deg, #3a3a4a 0%, #2a2a38 40%, #222230 100%);
+      border-radius: 90px 90px 4px 4px;
+      border: 2px solid #4a4a5a;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.05);
+    }
+    .tombstone .stone::before {
+      content: '';
+      position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border-radius: 82px 82px 2px 2px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .tombstone .slack-logo {
+      font-size: 2.4rem; margin-bottom: 6px;
+      filter: grayscale(1) brightness(0.7);
+    }
+    .tombstone .rip-text {
+      font-size: 1.6rem; font-weight: 900; letter-spacing: 4px;
+      color: #8888a0; margin-bottom: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .tombstone .dates {
+      font-size: 0.7rem; color: #6a6a80;
+      letter-spacing: 0.5px;
+    }
+    .tombstone .epitaph {
+      font-size: 0.65rem; color: #555568;
+      font-style: italic; margin-top: 10px;
+      text-align: center; line-height: 1.4;
+      max-width: 130px;
+    }
+    .tombstone .ground {
+      width: 240px; height: 20px;
+      background: linear-gradient(180deg, #1a1a24 0%, var(--bg) 100%);
+      border-radius: 50%;
+      margin-top: -4px;
+    }
+    .tombstone .flowers {
+      font-size: 1rem; margin-top: -14px;
+      letter-spacing: 2px;
     }
   </style>
 </head>
@@ -281,6 +333,16 @@
     </div>
 
     <section class="hero">
+      <div class="tombstone">
+        <div class="stone">
+          <div class="slack-logo">#</div>
+          <div class="rip-text">R.I.P.</div>
+          <div class="dates">2013 &mdash; 2026</div>
+          <div class="epitaph">"Where work happened"</div>
+        </div>
+        <div class="ground"></div>
+        <div class="flowers">&#x1FAB7; &#x1F337; &#x1F940; &#x1F337; &#x1FAB7;</div>
+      </div>
       <h1>Your Slack is <span class="strike">alive</span> <span class="red">dead.</span><br>Your data doesn't have to be.</h1>
       <p>Slack already wiped workspaces across China, Hong Kong, and Macau. Thousands of teams have permanently lost years of messages, files, and institutional knowledge. If you still have access, back up now.</p>
       <div class="victims">Keep a memory of your chat history &mdash; no admin access needed to export</div>
