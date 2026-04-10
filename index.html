@@ -9,7 +9,7 @@
   <meta property="og:description" content="Slack has already deleted thousands of workspaces across Greater China. Back up your remaining data now before it's gone forever.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -25,6 +25,8 @@
       --purple: #a78bfa;
       --green: #34d399;
       --yellow: #fbbf24;
+      --teamily-green: #00C951;
+      --teamily-teal: #00baa7;
     }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
@@ -166,24 +168,54 @@
 
     /* Teamily AI section */
     .teamily-section {
-      background: linear-gradient(135deg, rgba(167,139,250,0.05), rgba(52,211,153,0.05));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(0,201,81,0.04), rgba(0,186,167,0.06));
+      border: 1px solid rgba(0,201,81,0.15);
+      border-radius: 20px;
+      padding: 48px 32px;
       text-align: center;
       margin: 40px 0;
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
-    .teamily-section h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
-    .teamily-section p { color: var(--text-dim); max-width: 600px; margin: 0 auto 20px; }
+    .teamily-section::before {
+      content: '';
+      position: absolute; top: -120px; right: -80px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: rgba(0,201,81,0.08);
+      filter: blur(100px); pointer-events: none;
+    }
+    .teamily-section::after {
+      content: '';
+      position: absolute; bottom: -100px; left: -60px;
+      width: 250px; height: 250px; border-radius: 50%;
+      background: rgba(0,186,167,0.1);
+      filter: blur(80px); pointer-events: none;
+    }
+    .teamily-section h2 {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-size: 1.6rem; font-weight: 800; margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--teamily-green) 0%, var(--teamily-teal) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .teamily-section > p { color: var(--text-dim); max-width: 600px; margin: 0 auto 20px; position: relative; }
     .teamily-features {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 14px; text-align: left; margin-top: 24px;
+      position: relative;
     }
     .teamily-feat {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 16px;
+      background: rgba(0,201,81,0.03); border: 1px solid rgba(0,201,81,0.12);
+      border-radius: 14px; padding: 18px;
+      transition: border-color 0.3s, background 0.3s;
     }
-    .teamily-feat h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; color: var(--purple); }
+    .teamily-feat:hover {
+      border-color: rgba(0,201,81,0.3);
+      background: rgba(0,201,81,0.06);
+    }
+    .teamily-feat h4 { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; color: var(--teamily-green); }
     .teamily-feat p { font-size: 0.82rem; color: var(--text-dim); }
 
     /* FAQ */
@@ -324,13 +356,13 @@
           </div>
           <p style="margin-top:8px;font-size:0.8rem;color:var(--text-dim);">Export is also compatible with Mattermost and Discord importers if you're migrating platforms.</p>
         </div>
-        <div class="step" style="opacity:0.85;">
+        <div class="step" style="opacity:0.85;border-color:rgba(0,201,81,0.25);">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <div class="step-num s2">3</div>
-            <span style="font-size:0.7rem;font-weight:700;color:var(--yellow);background:rgba(251,191,36,0.1);padding:2px 10px;border-radius:100px;">COMING SOON</span>
+            <div class="step-num" style="background:rgba(0,201,81,0.12);color:var(--teamily-green);">3</div>
+            <span style="font-size:0.7rem;font-weight:700;color:var(--teamily-green);background:rgba(0,201,81,0.08);padding:2px 10px;border-radius:100px;">COMING SOON</span>
           </div>
-          <h3>AI-powered search with Teamily AI</h3>
-          <p>We're building an integration with <a href="https://teamily.ai" target="_blank" style="color:var(--purple);">Teamily AI</a> to transform your Slack export into an AI-native workspace. Ask natural language questions, discover connections, and chat with your history &mdash; with AI agents as first-class participants.</p>
+          <h3 style="font-family:'Plus Jakarta Sans','Inter',sans-serif;">AI-powered search with Teamily AI</h3>
+          <p>We're building an integration with <a href="https://teamily.ai" target="_blank" style="color:var(--teamily-green);">Teamily AI</a> to transform your Slack export into an AI-native workspace. Ask natural language questions, discover connections, and chat with your history &mdash; with AI agents as first-class participants.</p>
           <div style="margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:0.88rem;color:var(--text-dim);font-style:italic;">
             "What did @jenny say about the Q3 launch plan?"<br>
             "Summarize all decisions made in #engineering last month"
@@ -396,8 +428,8 @@
           <p>Move from Slack to a next-generation messenger where your team's history and knowledge carry forward.</p>
         </div>
       </div>
-      <div style="margin-top:24px;">
-        <a href="https://teamily.ai" class="btn btn-outline" target="_blank" style="font-size:0.9rem;">Visit Teamily AI</a>
+      <div style="margin-top:24px;position:relative;">
+        <a href="https://teamily.ai" class="btn" target="_blank" style="font-size:0.9rem;font-family:'Plus Jakarta Sans','Inter',sans-serif;background:linear-gradient(135deg, #00C951, #00baa7);color:#fff;box-shadow:0 4px 20px rgba(0,201,81,0.3);">Visit Teamily AI &rarr;</a>
       </div>
     </div>
 
@@ -443,7 +475,7 @@
 
     <section style="padding:0 0 40px;">
       <div class="section-title">
-        <h2>Open Source Tools</h2>
+        <h2>Powered By</h2>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <a href="https://github.com/rusq/slackdump" target="_blank" style="text-decoration:none;">
@@ -454,10 +486,10 @@
           </div>
         </a>
         <a href="https://teamily.ai" target="_blank" style="text-decoration:none;">
-          <div class="feature" style="transition:border-color 0.3s;cursor:pointer;">
-            <h4 style="color:var(--purple);">Teamily AI</h4>
+          <div class="feature" style="transition:border-color 0.3s;cursor:pointer;border-color:rgba(0,201,81,0.15);">
+            <h4 style="color:var(--teamily-green);font-family:'Plus Jakarta Sans','Inter',sans-serif;">Teamily AI</h4>
             <p>The world's first AI-native messenger. Turn conversations into searchable knowledge with AI agents and universal memory.</p>
-            <p style="margin-top:8px;font-size:0.8rem;color:var(--purple);">teamily.ai</p>
+            <p style="margin-top:8px;font-size:0.8rem;color:var(--teamily-teal);">teamily.ai</p>
           </div>
         </a>
       </div>
